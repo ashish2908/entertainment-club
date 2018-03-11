@@ -16,6 +16,11 @@
 
 package com.example;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,13 +31,27 @@ import org.springframework.web.bind.annotation.RestController;
 public class Main {
 
   public static void main(String[] args) throws Exception {
-    SpringApplication.run(Main.class, args);
+	  SpringApplication.run(Main.class, args);
   }
 
   	@RequestMapping("/message")
   	public String hello()
 	{
-		return "Hello World";
+  		String output = "";
+  		try{  
+  			Class.forName("com.mysql.jdbc.Driver");  
+  			//Connection con=DriverManager.getConnection("jdbc:mysql://db4free.net:3307/entertainment","ashish29","ashish29");  
+  			Connection con = DriverManager.getConnection("jdbc:mysql://db4free.net:3307/entertainment","ashish29","ashish29");
+  			//here sonoo is database name, root is username and password  
+  			Statement stmt=con.createStatement();  
+  			ResultSet rs=stmt.executeQuery("select * from recipes");  
+  			
+  			while(rs.next())  
+  			output = rs.getString("recipe_name"); 
+  			//con.close();  
+  			}catch(Exception e){ e.printStackTrace();}  
+  			
+		return output;
 	}
 
 }
