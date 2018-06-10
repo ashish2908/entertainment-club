@@ -443,14 +443,13 @@ var HomeComponent = /** @class */ (function () {
         });
     };
     HomeComponent.prototype.signup = function (formData) {
-        var _this = this;
         this.apiBaseService.post('/api/signup', formData).subscribe(function (response) {
-            _this.getDefectTableData();
         });
     };
     HomeComponent.prototype.raiseDefectForm = function (formData) {
+        var _this = this;
         this.apiBaseService.post('/api/tasks/createnew', formData).subscribe(function (response) {
-            console.log(response);
+            _this.getDefectTableData();
         });
     };
     HomeComponent.prototype.triggerSnapshot = function () {
@@ -619,7 +618,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var ApiBaseService = /** @class */ (function () {
     function ApiBaseService(httpClient) {
         this.httpClient = httpClient;
-        this.apiToken = JSON.parse(localStorage.getItem('currentUser')).apiToken;
     }
     ApiBaseService.prototype.createURL = function (url) {
         return "http://139.59.1.140" + url;
@@ -632,11 +630,13 @@ var ApiBaseService = /** @class */ (function () {
         return payload;
     };
     ApiBaseService.prototype.post = function (url, payload) {
-        var headers = this.apiToken ? new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]().append('Authorization', '4b78808b27999fc8f9d2d37257aa85db') : new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]();
+        this.apiToken = localStorage.getItem('currentUser') ? JSON.parse(localStorage.getItem('currentUser')).apiToken : undefined;
+        var headers = this.apiToken ? new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]().append('Authorization', this.apiToken) : new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]();
         return this.httpClient.post(this.createURL(url), this.createFormData(payload), { headers: headers });
     };
     ApiBaseService.prototype.get = function (url) {
-        var headers = this.apiToken ? new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]().append('Authorization', '4b78808b27999fc8f9d2d37257aa85db') : new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]();
+        this.apiToken = localStorage.getItem('currentUser') ? JSON.parse(localStorage.getItem('currentUser')).apiToken : undefined;
+        var headers = this.apiToken ? new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]().append('Authorization', this.apiToken) : new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]();
         return this.httpClient.get(this.createURL(url), { headers: headers });
     };
     ApiBaseService = __decorate([
